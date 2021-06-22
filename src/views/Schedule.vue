@@ -19,6 +19,11 @@
         >
           <ScheduleComponent :course="course" />
         </div>
+        <NewScheduleComponent
+          :addingItem="addingItem"
+          @add-button="handleToggleAdding"
+          @submit-schedule-item="handleSubmitScheduleItem"
+        />
       </div>
     </main>
   </div>
@@ -26,8 +31,10 @@
 
 <script>
 import axios from "axios";
+import qs from "qs";
 
 import ScheduleComponent from "@/components/ScheduleComponent/ScheduleComponent";
+import NewScheduleComponent from "@/components/ScheduleComponent/NewScheduleComponent.vue";
 
 export default {
   name: "Schedule",
@@ -35,10 +42,12 @@ export default {
     return {
       schedule: [],
       endpoint: "http://192.168.1.29:8765/api/schedule/",
+      addingItem: false,
     };
   },
   components: {
     ScheduleComponent,
+    NewScheduleComponent,
   },
   created() {
     this.getSchedule();
@@ -50,6 +59,48 @@ export default {
         .then((response) => (this.schedule = response.data))
         .catch((error) => console.log(error));
     },
+    handleToggleAdding() {
+      this.addingItem = !this.addingItem;
+    },
+    handleSubmitScheduleItem(scheduleItem) {
+      let {
+        course_id,
+        professor_id,
+        start_time,
+        end_time,
+        semester,
+        year,
+        monday,
+        tuesday,
+        wednesday,
+        thursday,
+        friday,
+      } = scheduleItem;
+      var itemData = qs.stringify({
+        course_id,
+        professor_id,
+        start_time,
+        end_time,
+        semester,
+        year,
+        monday: +monday,
+        tuesday: +tuesday,
+        wednesday: +wednesday,
+        thursday: +thursday,
+        friday: +friday,
+      });
+      var config = {
+        method: "post",
+        url: `${this.endpoint}add/`,
+        data: itemData,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      };
+      axios(config)
+        .then(() => this.getSchedule())
+        .catch((error) => console.error(error));
+    },
   },
 };
 </script>
@@ -58,7 +109,7 @@ export default {
 .schedule-list {
   display: flex;
   flex-direction: column;
-  width: 1100px;
+  width: 1200px;
   margin: auto;
   justify-content: center;
 }
@@ -91,5 +142,10 @@ export default {
   flex-direction: row;
   width: inherit;
   justify-content: center;
+}
+
+.add-button {
+  align-self: center;
+  width: 100px;
 }
 </style>
