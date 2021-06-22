@@ -3,7 +3,15 @@
     <h3>{{ student.first_name + " " + student.last_name }}</h3>
     <p>Major: {{ student.major }}</p>
     <p>Enrolled Courses: {{ student.student_schedule.length }}</p>
-    <p>Semster Credits: {{ "333" }}</p>
+    <p>
+      Semster Credits:
+      {{
+        student.student_schedule.reduce(
+          (acc, item) => acc + item.schedule.course.credit_value,
+          0
+        )
+      }}
+    </p>
     <div class="button-set">
       <button type="button" class="delete-button" @click="handleToggleEdit">
         Edit
@@ -81,6 +89,9 @@ export default {
       };
       this.editing = !this.editing;
     },
+  },
+  mounted() {
+    console.log(this.student);
   },
 };
 </script>
