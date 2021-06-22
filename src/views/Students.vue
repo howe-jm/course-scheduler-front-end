@@ -23,9 +23,9 @@
 </template>
 
 <script>
-var axios = require("axios");
-var FormData = require("form-data");
-var qs = require("qs");
+import axios from "axios";
+import FormData from "form-data";
+import qs from "qs";
 
 import Student from "@/components/Students/Student.vue";
 import NewStudent from "@/components/Students/NewStudent.vue";
@@ -101,12 +101,8 @@ export default {
     getAllStudents() {
       axios
         .get(this.endpoint)
-        .then((response) => {
-          this.students = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        .then((response) => (this.students = response.data))
+        .catch((error) => console.log(error));
     },
   },
 };

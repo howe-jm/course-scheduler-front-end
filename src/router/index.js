@@ -1,9 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+
+// Views
 import Home from '../views/Home.vue';
 import Students from '../views/Students.vue';
 import Professors from '../views/Professors.vue';
 import Courses from '../views/Courses.vue';
+import Schedule from '../views/Schedule.vue';
 
 Vue.use(VueRouter);
 
@@ -35,6 +38,11 @@ const routes = [
     path: '/courses',
     name: 'Courses',
     component: Courses,
+  },
+  {
+    path: '/schedule',
+    name: 'Schedule',
+    component: Schedule,
   },
 ];
 

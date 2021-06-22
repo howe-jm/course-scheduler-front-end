@@ -6,7 +6,8 @@
       <router-link to="/about">About</router-link> |
       <router-link to="/students">Students</router-link> |
       <router-link to="/professors">Professors</router-link> |
-      <router-link to="/courses">Courses</router-link> | Course Schedule(NYI)
+      <router-link to="/courses">Courses</router-link> |
+      <router-link to="/schedule">Course Schedule</router-link>
     </div>
     <router-view />
   </div>
