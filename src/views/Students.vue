@@ -8,41 +8,12 @@
       <div class="content">Main Content</div>
       <h2>Students</h2>
       <div class="student-list">
-        <div v-for="student in students" class="student" :key="student.id">
-          <h3>{{ student.first_name + " " + student.last_name }}</h3>
-          <p>Major: {{ student.major }}</p>
-          <button type="button" class="delete-button" @click="deleteStudent()">
-            Delete
-          </button>
-        </div>
-        <div class="add-student">
-          <form class="add-student-form">
-            <p>
-              First Name:
-              <input
-                name="first_name"
-                type="text"
-                v-model="newStudent.first_name"
-              />
-            </p>
-            <p>
-              Last Name:
-              <input
-                name="last_name"
-                type="text"
-                v-model="newStudent.last_name"
-              />
-            </p>
-            <p>
-              Major:<input
-                name="major"
-                type="text"
-                v-model="newStudent.major"
-              />
-            </p>
-            <button type="button" @click="addNewStudent">Submit</button>
-          </form>
-        </div>
+        <span v-for="student in students" :key="student.id">
+          <Student :student="student" />
+        </span>
+        <span
+          ><NewStudent :addingStudent="true" @add-student="handleAddStudent"
+        /></span>
       </div>
     </main>
   </div>
@@ -52,8 +23,15 @@
 var axios = require("axios");
 var FormData = require("form-data");
 
+import Student from "@/components/Student.vue";
+import NewStudent from "@/components/NewStudent.vue";
+
 export default {
   name: "app",
+  components: {
+    Student,
+    NewStudent,
+  },
   data() {
     return {
       students: [],
@@ -71,6 +49,9 @@ export default {
   },
 
   methods: {
+    handleAddStudent(newStudent) {
+      this.addNewStudent(newStudent);
+    },
     getAllStudents() {
       axios
         .get(this.endpoint)
@@ -81,8 +62,7 @@ export default {
           console.log(error);
         });
     },
-    addNewStudent() {
-      let { newStudent } = this;
+    addNewStudent(newStudent) {
       var studentData = new FormData();
       studentData.append("first_name", newStudent.first_name);
       studentData.append("last_name", newStudent.last_name);
@@ -90,7 +70,7 @@ export default {
 
       var config = {
         method: "post",
-        url: "http://192.168.1.29:8765/api/students/add/",
+        url: `${this.endpoint}add/`,
         data: studentData,
         headers: { "Content-Type": "multipart/form-data" },
       };
