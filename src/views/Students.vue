@@ -35,11 +35,6 @@ export default {
   data() {
     return {
       students: [],
-      newStudent: {
-        first_name: "",
-        last_name: "",
-        major: "",
-      },
       endpoint: "http://192.168.1.29:8765/api/students/",
     };
   },
