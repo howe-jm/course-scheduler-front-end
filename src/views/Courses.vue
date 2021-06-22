@@ -1,43 +1,21 @@
 <template>
-  <div id="app">
-    <header>
-      <h1>Scheduling App</h1>
-    </header>
+  <div id="courses">
     <main>
-      <aside class="upper-nav">Nav Stuff</aside>
-      <div class="content">Main Content</div>
       <h2>Courses</h2>
       <div class="course-list">
-        <div v-for="course in courses" class="course" :key="course.id">
-          <h3>{{ course.course_code + ": " + course.subject }}</h3>
-          <p>Credit Value: {{ course.credit_value }}</p>
-          <button type="button" class="delete-button" @click="deleteCourse()">
-            Delete
-          </button>
+        <div v-for="course in courses" :key="course.id" class="course">
+          <Course
+            :course="course"
+            @delete-course="handleDeleteCourse"
+            @edit-course="handleEditCourse"
+          />
         </div>
-        <div class="add-course">
-          <form class="add-course-form">
-            <p>
-              Subject:
-              <input name="subject" type="text" v-model="newCourse.subject" />
-            </p>
-            <p>
-              Course Code:
-              <input
-                name="course_code"
-                type="text"
-                v-model="newCourse.course_code"
-              />
-            </p>
-            <p>
-              Credit Value:<input
-                name="credit_value"
-                type="text"
-                v-model="newCourse.credit_value"
-              />
-            </p>
-            <button type="button" @click="addNewCourse">Submit</button>
-          </form>
+        <div class="course">
+          <NewCourse
+            :addingCourse="addingCourse"
+            @add-course="handleAddCourse"
+            @toggle-adding="handleToggleAdding"
+          />
         </div>
       </div>
     </main>
@@ -47,17 +25,22 @@
 <script>
 var axios = require("axios");
 var FormData = require("form-data");
+var qs = require("qs");
+
+import Course from "@/components/Courses/Course.vue";
+import NewCourse from "@/components/Courses/NewCourse.vue";
 
 export default {
-  name: "app",
+  name: "Courses",
+  components: {
+    Course,
+    NewCourse,
+  },
+
   data() {
     return {
       courses: [],
-      newCourse: {
-        subject: "",
-        course_code: "",
-        credit_value: "3",
-      },
+      addingCourse: false,
       endpoint: "http://192.168.1.29:8765/api/courses/",
     };
   },
@@ -67,6 +50,54 @@ export default {
   },
 
   methods: {
+    handleAddCourse(newCourse) {
+      var courseData = new FormData();
+      courseData.append("subject", newCourse.subject);
+      courseData.append("course_code", newCourse.course_code);
+      courseData.append("credit_value", newCourse.credit_value);
+
+      var config = {
+        method: "post",
+        url: `${this.endpoint}add/`,
+        data: courseData,
+        headers: { "Content-Type": "multipart/form-data" },
+      };
+
+      axios(config)
+        .then(() => this.getAllCourses())
+        .catch((error) => console.log(error));
+    },
+    handleToggleAdding() {
+      this.addingCourse = !this.addingCourse;
+    },
+    handleDeleteCourse(courseId) {
+      console.log(courseId);
+      axios
+        .delete(this.endpoint + `/delete/${courseId}`)
+        .then(() => this.getAllCourses())
+        .catch((error) => console.log(error));
+    },
+    handleEditCourse(courseId, editedCourse) {
+      console.log("Clicked");
+      var courseData = qs.stringify({
+        subject: editedCourse.subject,
+        course_code: editedCourse.course_code,
+        credit_value: editedCourse.credit_value,
+      });
+
+      var config = {
+        method: "put",
+        url: `${this.endpoint}/edit/${courseId}`,
+        data: courseData,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      };
+
+      axios(config)
+        .then(() => this.getAllCourses())
+        .catch((error) => console.log(error));
+    },
     getAllCourses() {
       axios
         .get(this.endpoint)
@@ -77,56 +108,25 @@ export default {
           console.log(error);
         });
     },
-    addNewCourse() {
-      let { newCourse } = this;
-      var courseData = new FormData();
-      courseData.append("subject", newCourse.subject);
-      courseData.append("course_code", newCourse.course_code);
-      courseData.append("credit_value", newCourse.credit_value);
-
-      var config = {
-        method: "post",
-        url: "http://192.168.1.29:8765/api/courses/add/",
-        data: courseData,
-        headers: { "Content-Type": "multipart/form-data" },
-      };
-
-      console.log(config);
-
-      axios(config)
-        .then(() => {
-          this.newCourse = {
-            subject: "",
-            course_code: "",
-            credit_value: "3",
-          };
-        })
-        .then(() => this.getAllCourses())
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
   },
 };
 </script>
+
 <style>
-#app {
+#courses {
   display: flex;
   flex-flow: column wrap;
   text-align: center;
   margin-top: 60px;
 }
+
 .course-list {
   display: flex;
   flex-flow: row wrap;
   border: 1px solid black;
-  max-width: 904px;
   margin: auto;
-}
-.delete-button {
-  align-self: center;
-  justify-self: flex-end;
-  margin-top: auto;
+  width: fit-content;
+  max-width: 864px;
 }
 
 .course {
@@ -138,13 +138,27 @@ export default {
   width: 200px;
   height: 250px;
 }
+
+.course-inner {
+  display: flex;
+  flex-flow: column wrap;
+  height: inherit;
+}
+
+.button-set {
+  align-self: center;
+  justify-self: flex-end;
+  margin-top: auto;
+  margin-bottom: 10px;
+}
+
+.course,
+p {
+  margin: 5px;
+}
+
 .add-course {
   display: flex;
   flex-flow: column wrap;
-  border: 1px solid black;
-  margin: 10px;
-  padding: 2px;
-  width: 200px;
-  height: 250px;
 }
 </style>
