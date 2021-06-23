@@ -11,18 +11,22 @@
           <p class="row-professor">Professor</p>
           <p class="row">Year</p>
           <p class="row">Semester</p>
+          <p class="button-row">Controls</p>
         </div>
         <div
           v-for="course in schedule"
           :key="course.id"
           class="schedule-course"
         >
-          <ScheduleComponent :course="course" />
+          <ScheduleComponent
+            :course="course"
+            @refresh-schedule="refreshSchedule"
+          />
         </div>
         <NewScheduleComponent
           :addingItem="addingItem"
           @add-button="handleToggleAdding"
-          @submit-schedule-item="handleAddScheduleItem"
+          @submit-schedule-item="refreshSchedule"
         />
       </div>
     </main>
@@ -61,7 +65,7 @@ export default {
     handleToggleAdding() {
       this.addingItem = !this.addingItem;
     },
-    handleAddScheduleItem() {
+    refreshSchedule() {
       this.getSchedule();
     },
   },
@@ -110,5 +114,10 @@ export default {
 .add-button {
   align-self: center;
   width: 100px;
+}
+.button-row {
+  width: 81px;
+  outline: 1px solid black;
+  background: lightgrey;
 }
 </style>

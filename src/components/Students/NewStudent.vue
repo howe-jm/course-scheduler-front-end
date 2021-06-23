@@ -78,7 +78,7 @@ export default {
 
       axios(config)
         .then(() => {
-          this.$emit("add-student");
+          this.$emit("refresh-students");
           this.handleToggleAdding();
         })
         .catch((error) => console.log(error));

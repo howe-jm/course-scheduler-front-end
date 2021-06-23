@@ -10,14 +10,13 @@
         >
           <Professor
             :professor="professor"
-            @delete-professor="handleDeleteProfessor"
-            @edit-professor="handleEditProfessor"
+            @refresh-professors="handleRefreshProfessors"
           />
         </div>
         <div class="professor">
           <NewProfessor
             :addingProfessor="addingProfessor"
-            @add-professor="handleAddProfessor"
+            @refresh-professors="handleRefreshProfessors"
             @toggle-adding="handleToggleAdding"
           />
         </div>
@@ -28,7 +27,6 @@
 
 <script>
 var axios = require("axios");
-var qs = require("qs");
 
 import Professor from "@/components/Professors/Professor.vue";
 import NewProfessor from "@/components/Professors/NewProfessor.vue";
@@ -53,38 +51,11 @@ export default {
   },
 
   methods: {
-    handleAddProfessor() {
+    handleRefreshProfessors() {
       this.getAllProfessors();
     },
     handleToggleAdding() {
       this.addingProfessor = !this.addingProfessor;
-    },
-    handleDeleteProfessor(professorId) {
-      console.log(professorId);
-      axios
-        .delete(this.endpoint + `/delete/${professorId}`)
-        .then(() => this.getAllProfessors())
-        .catch((error) => console.log(error));
-    },
-    handleEditProfessor(professorId, editedProfessor) {
-      console.log("Clicked");
-      var professorData = qs.stringify({
-        first_name: editedProfessor.first_name,
-        last_name: editedProfessor.last_name,
-      });
-
-      var config = {
-        method: "put",
-        url: `${this.endpoint}/edit/${professorId}`,
-        data: professorData,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      };
-
-      axios(config)
-        .then(() => this.getAllProfessors())
-        .catch((error) => console.log(error));
     },
     getAllProfessors() {
       axios

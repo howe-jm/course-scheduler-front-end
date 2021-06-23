@@ -23,7 +23,7 @@
       <button type="button" @click="handleToggleAdding">Cancel</button>
     </div>
   </form>
-  <div v-else class="new-professor-form">
+  <div v-else class="button-set">
     <button
       type="button"
       class="new-professor-button"
@@ -69,7 +69,7 @@ export default {
 
       axios(config)
         .then(() => {
-          this.$emit("add-professor");
+          this.$emit("refresh-professors");
           this.handleToggleAdding();
         })
         .catch((error) => console.log(error));

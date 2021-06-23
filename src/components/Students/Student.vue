@@ -28,8 +28,8 @@
       <input
         name="first_name"
         type="text"
-        v-model="editingStudent.first_name"
-        @keyup.enter="handleSubmitEdit"
+        v-model="editedStudent.first_name"
+        @keyup.enter="handleEditStudent"
       />
     </p>
     <p>
@@ -37,49 +37,76 @@
       <input
         name="last_name"
         type="text"
-        v-model="editingStudent.last_name"
-        @keyup.enter="handleSubmitEdit"
+        v-model="editedStudent.last_name"
+        @keyup.enter="handleEditStudent"
       />
     </p>
     <p>
       Major:<input
         name="major"
         type="text"
-        v-model="editingStudent.major"
-        @keyup.enter="handleSubmitEdit"
+        v-model="editedStudent.major"
+        @keyup.enter="handleEditStudent"
       />
     </p>
     <div class="button-set">
-      <button type="button" @click="handleSubmitEdit">Submit</button> |
+      <button type="button" @click="handleEditStudent">Submit</button> |
       <button type="button" @click="handleToggleEdit">Cancel</button>
     </div>
   </form>
 </template>
 
 <script>
+import axios from "axios";
+import qs from "qs";
+
 export default {
   name: "Student",
   data() {
     return {
       editing: false,
-      editingStudent: {
+      editedStudent: {
         first_name: this.student.first_name,
         last_name: this.student.last_name,
         major: this.student.major,
       },
       courses: this.student.student_schedule,
+      editEndpoint: `http://192.168.1.29:8765/api/students/edit/${this.student.id}`,
+      deleteEndpoint: `http://192.168.1.29:8765/api/students/delete/${this.student.id}`,
     };
   },
   props: {
     student: Object,
   },
   methods: {
-    handleDeleteStudent() {
-      this.$emit("delete-student", this.student.id);
+    handleEditStudent() {
+      var studentData = qs.stringify({
+        first_name: this.editedStudent.first_name,
+        last_name: this.editedStudent.last_name,
+        major: this.editedStudent.major,
+      });
+
+      var config = {
+        method: "put",
+        url: this.editEndpoint,
+        data: studentData,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      };
+
+      axios(config)
+        .then(() => {
+          this.$emit("refresh-students");
+          this.handleToggleEdit();
+        })
+        .catch((error) => console.log(error));
     },
-    handleSubmitEdit() {
-      this.$emit("edit-student", this.student.id, this.editingStudent);
-      this.handleToggleEdit();
+    handleDeleteStudent() {
+      axios
+        .delete(this.deleteEndpoint)
+        .then(() => this.$emit("refresh-students"))
+        .catch((error) => console.log(error));
     },
     handleToggleEdit() {
       this.editingStudent = {
@@ -89,9 +116,6 @@ export default {
       };
       this.editing = !this.editing;
     },
-  },
-  mounted() {
-    console.log(this.student);
   },
 };
 </script>

@@ -4,16 +4,12 @@
       <h2>Courses</h2>
       <div class="course-list">
         <div v-for="course in courses" :key="course.id" class="course">
-          <Course
-            :course="course"
-            @delete-course="handleDeleteCourse"
-            @edit-course="handleEditCourse"
-          />
+          <Course :course="course" @refresh-courses="handleRefreshCourses" />
         </div>
         <div class="course">
           <NewCourse
             :addingCourse="addingCourse"
-            @add-course="handleAddCourse"
+            @refresh-courses="handleRefreshCourses"
             @toggle-adding="handleToggleAdding"
           />
         </div>
@@ -24,7 +20,6 @@
 
 <script>
 var axios = require("axios");
-var qs = require("qs");
 
 import Course from "@/components/Courses/Course.vue";
 import NewCourse from "@/components/Courses/NewCourse.vue";
@@ -49,39 +44,11 @@ export default {
   },
 
   methods: {
-    handleToggleAdding() {
-      this.addingCourse = !this.addingCourse;
-    },
-    handleAddCourse() {
+    handleRefreshCourses() {
       this.getAllCourses();
     },
-    handleDeleteCourse(courseId) {
-      console.log(courseId);
-      axios
-        .delete(this.endpoint + `/delete/${courseId}`)
-        .then(() => this.getAllCourses())
-        .catch((error) => console.log(error));
-    },
-    handleEditCourse(courseId, editedCourse) {
-      console.log("Clicked");
-      var courseData = qs.stringify({
-        subject: editedCourse.subject,
-        course_code: editedCourse.course_code,
-        credit_value: editedCourse.credit_value,
-      });
-
-      var config = {
-        method: "put",
-        url: `${this.endpoint}/edit/${courseId}`,
-        data: courseData,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      };
-
-      axios(config)
-        .then(() => this.getAllCourses())
-        .catch((error) => console.log(error));
+    handleToggleAdding() {
+      this.addingCourse = !this.addingCourse;
     },
     getAllCourses() {
       axios

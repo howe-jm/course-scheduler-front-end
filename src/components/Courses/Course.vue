@@ -9,7 +9,7 @@
         Edit
       </button>
       |
-      <button type="button" class="delete-button" @click="handleDeleteStudent">
+      <button type="button" class="delete-button" @click="handleDeleteCourse">
         Delete
       </button>
     </div>
@@ -20,8 +20,8 @@
       <input
         name="subject"
         type="text"
-        v-model="editingStudent.subject"
-        @keyup.enter="handleSubmitEdit"
+        v-model="editedCourse.subject"
+        @keyup.enter="handleEditCourse"
       />
     </p>
     <p>
@@ -29,51 +29,80 @@
       <input
         name="course_code"
         type="text"
-        v-model="editingStudent.course_code"
-        @keyup.enter="handleSubmitEdit"
+        v-model="editedCourse.course_code"
+        @keyup.enter="handleEditCourse"
       />
     </p>
     <p>
       Credit Value:<input
         name="credit_value"
         type="text"
-        v-model="editingStudent.credit_value"
-        @keyup.enter="handleSubmitEdit"
+        v-model="editedCourse.credit_value"
+        @keyup.enter="handleEditCourse"
       />
     </p>
     <div class="button-set">
-      <button type="button" @click="handleSubmitEdit">Submit</button>
+      <button type="button" @click="handleEditCourse">Submit</button>
       <button type="button" @click="handleToggleEdit">Cancel</button>
     </div>
   </form>
 </template>
 
 <script>
+import axios from "axios";
+import qs from "qs";
+
 export default {
-  name: "Student",
+  name: "Course",
   data() {
     return {
       editing: false,
-      editingStudent: {
+      editedCourse: {
         subject: this.course.subject,
         course_code: this.course.course_code,
         credit_value: this.course.credit_value,
       },
+      editEndpoint: `http://192.168.1.29:8765/api/courses/edit/${this.course.id}`,
+      deleteEndpoint: `http://192.168.1.29:8765/api/courses/delete/${this.course.id}`,
     };
   },
   props: {
     course: Object,
   },
   methods: {
-    handleDeleteStudent() {
-      this.$emit("delete-course", this.course.id);
+    handleEditCourse() {
+      var courseData = qs.stringify({
+        subject: this.editedCourse.subject,
+        course_code: this.editedCourse.course_code,
+        credit_value: this.editedCourse.credit_value,
+      });
+
+      var config = {
+        method: "put",
+        url: this.editEndpoint,
+        data: courseData,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      };
+
+      axios(config)
+        .then(() => {
+          this.$emit("refresh-courses");
+          this.handleToggleEdit();
+        })
+        .catch((error) => console.log(error));
     },
-    handleSubmitEdit() {
-      this.$emit("edit-course", this.course.id, this.editingStudent);
-      this.handleToggleEdit();
+
+    handleDeleteCourse() {
+      axios
+        .delete(this.deleteEndpoint)
+        .then(() => this.$emit("refresh-courses"))
+        .catch((error) => console.log(error));
     },
+
     handleToggleEdit() {
-      this.editingStudent = {
+      this.editedCourse = {
         subject: this.course.subject,
         course_code: this.course.course_code,
         credit_value: this.course.credit_value,

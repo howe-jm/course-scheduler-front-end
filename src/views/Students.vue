@@ -6,14 +6,13 @@
         <div v-for="student in students" :key="student.id" class="student">
           <Student
             :student="student"
-            @delete-student="handleDeleteStudent"
-            @edit-student="handleEditStudent"
+            @refresh-students="handleRefreshStudents"
           />
         </div>
         <div class="student">
           <NewStudent
             :addingStudent="addingStudent"
-            @add-student="handleAddStudent"
+            @refresh-students="handleRefreshStudents"
             @toggle-adding="handleToggleAdding"
           />
         </div>
@@ -24,7 +23,6 @@
 
 <script>
 import axios from "axios";
-import qs from "qs";
 
 import Student from "@/components/Students/Student.vue";
 import NewStudent from "@/components/Students/NewStudent.vue";
@@ -49,38 +47,11 @@ export default {
   },
 
   methods: {
-    handleAddStudent() {
+    handleRefreshStudents() {
       this.getAllStudents();
     },
     handleToggleAdding() {
       this.addingStudent = !this.addingStudent;
-    },
-    handleDeleteStudent(studentId) {
-      console.log(studentId);
-      axios
-        .delete(this.endpoint + `/delete/${studentId}`)
-        .then(() => this.getAllStudents())
-        .catch((error) => console.log(error));
-    },
-    handleEditStudent(studentId, editedStudent) {
-      var studentData = qs.stringify({
-        first_name: editedStudent.first_name,
-        last_name: editedStudent.last_name,
-        major: editedStudent.major,
-      });
-
-      var config = {
-        method: "put",
-        url: `${this.endpoint}/edit/${studentId}`,
-        data: studentData,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      };
-
-      axios(config)
-        .then(() => this.getAllStudents())
-        .catch((error) => console.log(error));
     },
     getAllStudents() {
       axios

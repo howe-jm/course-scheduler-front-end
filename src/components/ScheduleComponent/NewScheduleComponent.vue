@@ -30,8 +30,10 @@
         </option>
       </select>
     </p>
-    <p>Start: <input type="time" v-model="scheduleItem.start_time" /></p>
-    <p>End: <input type="time" v-model="scheduleItem.end_time" /></p>
+    <p>
+      Start: <input required type="time" v-model="scheduleItem.start_time" />
+    </p>
+    <p>End: <input required type="time" v-model="scheduleItem.end_time" /></p>
     <p>
       Monday: <input type="checkbox" v-model="scheduleItem.monday" :value="1" />
     </p>
@@ -52,6 +54,7 @@
     </p>
     <p>
       <input
+        required
         type="radio"
         id="fall"
         :value="0"
@@ -59,6 +62,7 @@
       />
       <label for="fall">Fall</label>
       <input
+        required
         type="radio"
         id="spring"
         :value="1"
@@ -67,14 +71,12 @@
       <label for="spring">Spring</label>
     </p>
     <p>
-      Year:
-      <input
-        type="number"
-        min="2021"
-        max="2022"
-        step="1"
-        v-model="scheduleItem.year"
-      />
+      School Year:
+      <select required v-model="scheduleItem.year">
+        <option>2021</option>
+        <option>2022</option>
+        <option>2023</option>
+      </select>
     </p>
     <div class="button-set">
       <button type="button" @click="handleAddScheduleItem">Submit</button> |
