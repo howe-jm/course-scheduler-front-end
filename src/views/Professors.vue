@@ -28,7 +28,6 @@
 
 <script>
 var axios = require("axios");
-var FormData = require("form-data");
 var qs = require("qs");
 
 import Professor from "@/components/Professors/Professor.vue";
@@ -54,21 +53,8 @@ export default {
   },
 
   methods: {
-    handleAddProfessor(newProfessor) {
-      var professorData = new FormData();
-      professorData.append("first_name", newProfessor.first_name);
-      professorData.append("last_name", newProfessor.last_name);
-
-      var config = {
-        method: "post",
-        url: `${this.endpoint}add/`,
-        data: professorData,
-        headers: { "Content-Type": "multipart/form-data" },
-      };
-
-      axios(config)
-        .then(() => this.getAllProfessors())
-        .catch((error) => console.log(error));
+    handleAddProfessor() {
+      this.getAllProfessors();
     },
     handleToggleAdding() {
       this.addingProfessor = !this.addingProfessor;

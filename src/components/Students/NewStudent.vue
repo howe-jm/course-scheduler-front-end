@@ -31,7 +31,7 @@
       <button type="button" @click="handleToggleAdding">Cancel</button>
     </div>
   </form>
-  <div v-else class="new-student-form">
+  <div v-else class="button-set">
     <button
       type="button"
       class="new-student-button"
@@ -43,6 +43,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import FormData from "form-data";
+
 export default {
   name: "Student",
   data() {
@@ -52,6 +55,7 @@ export default {
         last_name: "",
         major: "",
       },
+      endpoint: "http://192.168.1.29:8765/api/students/add",
     };
   },
   props: {
@@ -60,8 +64,24 @@ export default {
   },
   methods: {
     handleAddStudent() {
-      this.$emit("add-student", this.newStudent);
-      this.handleToggleAdding();
+      var studentData = new FormData();
+      studentData.append("first_name", this.newStudent.first_name);
+      studentData.append("last_name", this.newStudent.last_name);
+      studentData.append("major", this.newStudent.major);
+
+      var config = {
+        method: "post",
+        url: this.endpoint,
+        data: studentData,
+        headers: { "Content-Type": "multipart/form-data" },
+      };
+
+      axios(config)
+        .then(() => {
+          this.$emit("add-student");
+          this.handleToggleAdding();
+        })
+        .catch((error) => console.log(error));
     },
     handleToggleAdding() {
       this.$emit("toggle-adding");

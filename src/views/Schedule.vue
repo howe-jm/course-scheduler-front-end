@@ -22,7 +22,7 @@
         <NewScheduleComponent
           :addingItem="addingItem"
           @add-button="handleToggleAdding"
-          @submit-schedule-item="handleSubmitScheduleItem"
+          @submit-schedule-item="handleAddScheduleItem"
         />
       </div>
     </main>
@@ -31,7 +31,6 @@
 
 <script>
 import axios from "axios";
-import qs from "qs";
 
 import ScheduleComponent from "@/components/ScheduleComponent/ScheduleComponent";
 import NewScheduleComponent from "@/components/ScheduleComponent/NewScheduleComponent.vue";
@@ -62,44 +61,8 @@ export default {
     handleToggleAdding() {
       this.addingItem = !this.addingItem;
     },
-    handleSubmitScheduleItem(scheduleItem) {
-      let {
-        course_id,
-        professor_id,
-        start_time,
-        end_time,
-        semester,
-        year,
-        monday,
-        tuesday,
-        wednesday,
-        thursday,
-        friday,
-      } = scheduleItem;
-      var itemData = qs.stringify({
-        course_id,
-        professor_id,
-        start_time,
-        end_time,
-        semester,
-        year,
-        monday: +monday,
-        tuesday: +tuesday,
-        wednesday: +wednesday,
-        thursday: +thursday,
-        friday: +friday,
-      });
-      var config = {
-        method: "post",
-        url: `${this.endpoint}add/`,
-        data: itemData,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      };
-      axios(config)
-        .then(() => this.getSchedule())
-        .catch((error) => console.error(error));
+    handleAddScheduleItem() {
+      this.getSchedule();
     },
   },
 };

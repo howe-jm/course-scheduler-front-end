@@ -24,7 +24,6 @@
 
 <script>
 var axios = require("axios");
-var FormData = require("form-data");
 var qs = require("qs");
 
 import Course from "@/components/Courses/Course.vue";
@@ -50,25 +49,11 @@ export default {
   },
 
   methods: {
-    handleAddCourse(newCourse) {
-      var courseData = new FormData();
-      courseData.append("subject", newCourse.subject);
-      courseData.append("course_code", newCourse.course_code);
-      courseData.append("credit_value", newCourse.credit_value);
-
-      var config = {
-        method: "post",
-        url: `${this.endpoint}add/`,
-        data: courseData,
-        headers: { "Content-Type": "multipart/form-data" },
-      };
-
-      axios(config)
-        .then(() => this.getAllCourses())
-        .catch((error) => console.log(error));
-    },
     handleToggleAdding() {
       this.addingCourse = !this.addingCourse;
+    },
+    handleAddCourse() {
+      this.getAllCourses();
     },
     handleDeleteCourse(courseId) {
       console.log(courseId);

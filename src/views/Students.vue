@@ -24,7 +24,6 @@
 
 <script>
 import axios from "axios";
-import FormData from "form-data";
 import qs from "qs";
 
 import Student from "@/components/Students/Student.vue";
@@ -50,22 +49,8 @@ export default {
   },
 
   methods: {
-    handleAddStudent(newStudent) {
-      var studentData = new FormData();
-      studentData.append("first_name", newStudent.first_name);
-      studentData.append("last_name", newStudent.last_name);
-      studentData.append("major", newStudent.major);
-
-      var config = {
-        method: "post",
-        url: `${this.endpoint}add/`,
-        data: studentData,
-        headers: { "Content-Type": "multipart/form-data" },
-      };
-
-      axios(config)
-        .then(() => this.getAllStudents())
-        .catch((error) => console.log(error));
+    handleAddStudent() {
+      this.getAllStudents();
     },
     handleToggleAdding() {
       this.addingStudent = !this.addingStudent;
@@ -78,7 +63,6 @@ export default {
         .catch((error) => console.log(error));
     },
     handleEditStudent(studentId, editedStudent) {
-      console.log("Clicked");
       var studentData = qs.stringify({
         first_name: editedStudent.first_name,
         last_name: editedStudent.last_name,

@@ -39,6 +39,9 @@
 </template>
 
 <script>
+var axios = require("axios");
+var FormData = require("form-data");
+
 export default {
   name: "Course",
   data() {
@@ -48,6 +51,7 @@ export default {
         course_code: "",
         credit_value: "3",
       },
+      endpoint: "http://192.168.1.29:8765/api/courses/add",
     };
   },
   props: {
@@ -56,8 +60,24 @@ export default {
   },
   methods: {
     handleAddCourse() {
-      this.$emit("add-course", this.newCourse);
-      this.handleToggleAdding();
+      var courseData = new FormData();
+      courseData.append("subject", this.newCourse.subject);
+      courseData.append("course_code", this.newCourse.course_code);
+      courseData.append("credit_value", this.newCourse.credit_value);
+
+      var config = {
+        method: "post",
+        url: this.endpoint,
+        data: courseData,
+        headers: { "Content-Type": "multipart/form-data" },
+      };
+
+      axios(config)
+        .then(() => {
+          this.$emit("add-course");
+          this.handleToggleAdding();
+        })
+        .catch((error) => console.log(error));
     },
     handleToggleAdding() {
       this.$emit("toggle-adding");

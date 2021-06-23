@@ -35,6 +35,9 @@
 </template>
 
 <script>
+var axios = require("axios");
+var FormData = require("form-data");
+
 export default {
   name: "Professor",
   data() {
@@ -43,6 +46,8 @@ export default {
         first_name: "",
         last_name: "",
       },
+
+      endpoint: "http://192.168.1.29:8765/api/professors/add",
     };
   },
   props: {
@@ -51,8 +56,23 @@ export default {
   },
   methods: {
     handleAddProfessor() {
-      this.$emit("add-professor", this.newProfessor);
-      this.handleToggleAdding();
+      var professorData = new FormData();
+      professorData.append("first_name", this.newProfessor.first_name);
+      professorData.append("last_name", this.newProfessor.last_name);
+
+      var config = {
+        method: "post",
+        url: this.endpoint,
+        data: professorData,
+        headers: { "Content-Type": "multipart/form-data" },
+      };
+
+      axios(config)
+        .then(() => {
+          this.$emit("add-professor");
+          this.handleToggleAdding();
+        })
+        .catch((error) => console.log(error));
     },
     handleToggleAdding() {
       this.$emit("toggle-adding");

@@ -1,13 +1,13 @@
 <template>
   <span v-if="!addingItem">
-    <button type="button" class="add-button" @click="handleAddCourse">
+    <button type="button" class="add-button" @click="handleToggleAdding">
       Add Course
     </button>
   </span>
   <form v-else class="new-schedule-item">
     <p>
       <label for="class">Class:</label>
-      <select required name="class" id="class" v-model="newCourse.course_id">
+      <select required name="class" id="class" v-model="scheduleItem.course_id">
         <option v-for="course in courses" :key="course.id" :value="course.id">
           {{ course.course_code }}
         </option>
@@ -19,7 +19,7 @@
         required
         name="professor"
         id="professor"
-        v-model="newCourse.professor_id"
+        v-model="scheduleItem.professor_id"
       >
         <option
           v-for="professor in professors"
@@ -30,29 +30,40 @@
         </option>
       </select>
     </p>
-    <p>Start: <input type="time" v-model="newCourse.start_time" /></p>
-    <p>End: <input type="time" v-model="newCourse.end_time" /></p>
+    <p>Start: <input type="time" v-model="scheduleItem.start_time" /></p>
+    <p>End: <input type="time" v-model="scheduleItem.end_time" /></p>
     <p>
-      Monday: <input type="checkbox" v-model="newCourse.monday" :value="1" />
+      Monday: <input type="checkbox" v-model="scheduleItem.monday" :value="1" />
     </p>
     <p>
-      Tuesday: <input type="checkbox" v-model="newCourse.tuesday" :value="1" />
+      Tuesday:
+      <input type="checkbox" v-model="scheduleItem.tuesday" :value="1" />
     </p>
     <p>
       Wednesday:
-      <input type="checkbox" v-model="newCourse.wednesday" :value="1" />
+      <input type="checkbox" v-model="scheduleItem.wednesday" :value="1" />
     </p>
     <p>
       Thursday:
-      <input type="checkbox" v-model="newCourse.thursday" :value="1" />
+      <input type="checkbox" v-model="scheduleItem.thursday" :value="1" />
     </p>
     <p>
-      Friday: <input type="checkbox" v-model="newCourse.friday" :value="1" />
+      Friday: <input type="checkbox" v-model="scheduleItem.friday" :value="1" />
     </p>
     <p>
-      <input type="radio" id="fall" :value="0" v-model="newCourse.semester" />
+      <input
+        type="radio"
+        id="fall"
+        :value="0"
+        v-model="scheduleItem.semester"
+      />
       <label for="fall">Fall</label>
-      <input type="radio" id="spring" :value="1" v-model="newCourse.semester" />
+      <input
+        type="radio"
+        id="spring"
+        :value="1"
+        v-model="scheduleItem.semester"
+      />
       <label for="spring">Spring</label>
     </p>
     <p>
@@ -62,19 +73,20 @@
         min="2021"
         max="2022"
         step="1"
-        v-model="newCourse.year"
+        v-model="scheduleItem.year"
       />
     </p>
     <div class="button-set">
-      <button type="button" @click="handleSubmitCourse">Submit</button> |
-      <button type="button" @click="handleAddCourse">Cancel</button>
+      <button type="button" @click="handleAddScheduleItem">Submit</button> |
+      <button type="button" @click="handleToggleAdding">Cancel</button>
     </div>
   </form>
 </template>
 
 
 <script>
-var axios = require("axios");
+import axios from "axios";
+import qs from "qs";
 
 export default {
   name: "NewScheduleComponent",
@@ -84,7 +96,7 @@ export default {
       professors: [],
       courses: [],
       endpoint: "http://192.168.1.29:8765/api/",
-      newCourse: {
+      scheduleItem: {
         course_id: 1,
         monday: 0,
         tuesday: 0,
@@ -107,7 +119,49 @@ export default {
     this.getAllProfessors();
   },
   methods: {
-    handleAddCourse() {
+    handleAddScheduleItem() {
+      let {
+        course_id,
+        professor_id,
+        start_time,
+        end_time,
+        semester,
+        year,
+        monday,
+        tuesday,
+        wednesday,
+        thursday,
+        friday,
+      } = this.scheduleItem;
+      var itemData = qs.stringify({
+        course_id,
+        professor_id,
+        start_time,
+        end_time,
+        semester,
+        year,
+        monday: +monday,
+        tuesday: +tuesday,
+        wednesday: +wednesday,
+        thursday: +thursday,
+        friday: +friday,
+      });
+      var config = {
+        method: "post",
+        url: `${this.endpoint}schedule/add/`,
+        data: itemData,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      };
+      axios(config)
+        .then(() => {
+          this.$emit("submit-schedule-item");
+          this.handleToggleAdding();
+        })
+        .catch((error) => console.error(error));
+    },
+    handleToggleAdding() {
       this.newCourse = {
         course_id: 1,
         monday: 0,
@@ -122,10 +176,6 @@ export default {
         end_time: "11:00:00",
       };
       this.$emit("add-button");
-    },
-    handleSubmitCourse() {
-      this.$emit("submit-schedule-item", this.newCourse);
-      this.handleAddCourse();
     },
     getAllCourses() {
       axios
