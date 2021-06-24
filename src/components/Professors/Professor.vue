@@ -1,6 +1,10 @@
 <template>
   <span v-if="!editing" class="professor-inner">
-    <h3>{{ professor.first_name + " " + professor.last_name }}</h3>
+    <h3>
+      <router-link :to="{ path: `/professors/${professor.id}` }">{{
+        professor.first_name + " " + professor.last_name
+      }}</router-link>
+    </h3>
     <p>Scheduled Courses: {{ professor.schedule.length }}</p>
     <div class="button-set">
       <button type="button" class="delete-button" @click="handleToggleEdit">

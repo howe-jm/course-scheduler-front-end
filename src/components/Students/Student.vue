@@ -1,6 +1,10 @@
 <template>
   <span v-if="!editing" class="student-inner">
-    <h3>{{ student.first_name + " " + student.last_name }}</h3>
+    <h3>
+      <router-link :to="{ path: `/students/${student.id}` }">{{
+        student.first_name + " " + student.last_name
+      }}</router-link>
+    </h3>
     <p>Major: {{ student.major }}</p>
     <p>Enrolled Courses: {{ student.student_schedule.length }}</p>
     <p>

@@ -1,7 +1,9 @@
 <template>
   <span v-if="!editing" class="course-inner">
-    <h3>{{ course.course_code }}</h3>
-    <h4>{{ course.subject }}</h4>
+    <router-link :to="{ path: `/courses/${course.id}` }"
+      ><h3>{{ course.course_code }}</h3>
+      <h4>{{ course.subject }}</h4></router-link
+    >
     <p>Credit Value: {{ course.credit_value }}</p>
     <p>Scheduled: {{ course.schedule.length }}</p>
     <div class="button-set">

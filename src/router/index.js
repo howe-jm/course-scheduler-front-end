@@ -8,6 +8,10 @@ import Professors from '../views/Professors.vue';
 import Courses from '../views/Courses.vue';
 import Schedule from '../views/Schedule.vue';
 
+import SingleStudent from '../views/SingleStudent.vue';
+import SingleProfessor from '../views/SingleProfessor.vue';
+import SingleCourse from '../views/SingleCourse.vue';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -30,14 +34,29 @@ const routes = [
     component: Students,
   },
   {
+    path: '/students/:id',
+    name: 'SingleStudent',
+    component: SingleStudent,
+  },
+  {
     path: '/professors',
     name: 'Professors',
     component: Professors,
   },
   {
+    path: '/professors/:id',
+    name: 'SingleProfessor',
+    component: SingleProfessor,
+  },
+  {
     path: '/courses',
     name: 'Courses',
     component: Courses,
+  },
+  {
+    path: '/courses/:id',
+    name: 'SingleCourse',
+    component: SingleCourse,
   },
   {
     path: '/schedule',
