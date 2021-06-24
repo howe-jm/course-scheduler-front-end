@@ -94,19 +94,19 @@
       <input
         required
         type="radio"
-        id="fall"
+        :id="course.id + 'fall'"
         :value="0"
         v-model="editedCourse.semester"
       />
-      <label for="fall">Fall</label>
+      <label :for="course.id + 'fall'">Fall</label>
       <input
         required
         type="radio"
-        id="spring"
+        :id="course.id + 'spring'"
         :value="1"
         v-model="editedCourse.semester"
       />
-      <label for="spring">Spring</label>
+      <label :for="course.id + 'spring'">Spring</label>
     </div>
     <p class="button-row">
       <button @click="handleToggleEditing">Cancel</button>
@@ -136,7 +136,7 @@ export default {
         thursday: this.course.thursday,
         friday: this.course.friday,
         year: this.course.year,
-        semester: this.course.semester,
+        semester: this.course.semester ? 1 : 0,
         professor_id: this.course.professor_id,
         course_id: this.course.course_id,
       },
@@ -189,7 +189,6 @@ export default {
         professor_id: this.editedCourse.professor_id,
         course_id: this.editedCourse.course_id,
       });
-      console.log(courseData);
       var config = {
         method: "put",
         url: this.editEndpoint,
@@ -310,8 +309,14 @@ p {
 .row-days-editing {
   display: flex;
   flex-flow: column wrap;
-  width: 221px;
+  width: 220px;
   align-items: flex-end;
+  outline: 1px solid black;
+  margin-left: 5px;
+  margin-right: -4px;
+  margin-top: -4px;
+  padding-top: 4px;
+  height: 95px;
 }
 
 .row-days-editing div {
@@ -323,7 +328,13 @@ p {
 .row-semester-editing {
   display: flex;
   flex-direction: column;
-  width: 76px;
+  width: 75px;
+  outline: 1px solid black;
+  margin-left: 5px;
+  margin-right: -4px;
+  margin-top: -4px;
+  padding-top: 4px;
+  height: 95px;
 }
 
 .row-semester-editing label {

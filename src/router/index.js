@@ -3,17 +3,24 @@ import VueRouter from 'vue-router';
 
 // Views
 import Home from '../views/Home.vue';
+
+// Student views
 import Students from '../views/Students/Students.vue';
-import Professors from '../views/Professors/Professors.vue';
-import Courses from '../views/Courses/Courses.vue';
-import MainSchedule from '../views/MainSchedule/MainSchedule.vue';
-
 import SingleStudent from '../views/Students/SingleStudent.vue';
-import SingleStudentProfile from '../views/Students/SingleStudent/SingleStudentProfile.vue';
-import SingleStudentSchedule from '../views/Students/SingleStudent/SingleStudentSchedule.vue';
+// Student view children
+import SingleStudentProfile from '../views/Students/SingleStudentChildren/SingleStudentProfile.vue';
+import SingleStudentSchedule from '../views/Students/SingleStudentChildren/SingleStudentSchedule.vue';
 
+// Professor views
+import Professors from '../views/Professors/Professors.vue';
 import SingleProfessor from '../views/Professors/SingleProfessor.vue';
+
+// Courses views
+import Courses from '../views/Courses/Courses.vue';
 import SingleCourse from '../views/Courses/SingleCourse.vue';
+
+// Main schedule views
+import MainSchedule from '../views/MainSchedule/MainSchedule.vue';
 
 Vue.use(VueRouter);
 

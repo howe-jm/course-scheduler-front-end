@@ -51,6 +51,7 @@ export default {
 
 .schedule-component-inner-table {
   display: flex;
+  font-weight: bold;
   flex-direction: row;
   justify-content: center;
   border: 1px solid black;

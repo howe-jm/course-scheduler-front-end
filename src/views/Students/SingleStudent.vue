@@ -1,11 +1,7 @@
 <template>
   <div v-if="dataLoaded">
     <h2>
-      {{
-        student.first_name
-          ? student.first_name + " " + student.last_name
-          : "Loading..."
-      }}
+      {{ student.first_name + " " + student.last_name }}
     </h2>
     <div id="student-nav">
       <router-link
@@ -22,7 +18,7 @@
     </div>
     <router-view></router-view>
   </div>
-  <div v-else>Loading...</div>
+  <div v-else><h3>Loading...</h3></div>
 </template>
 
 <script>
