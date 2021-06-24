@@ -3,14 +3,17 @@ import VueRouter from 'vue-router';
 
 // Views
 import Home from '../views/Home.vue';
-import Students from '../views/Students.vue';
-import Professors from '../views/Professors.vue';
-import Courses from '../views/Courses.vue';
-import Schedule from '../views/Schedule.vue';
+import Students from '../views/Students/Students.vue';
+import Professors from '../views/Professors/Professors.vue';
+import Courses from '../views/Courses/Courses.vue';
+import MainSchedule from '../views/MainSchedule/MainSchedule.vue';
 
-import SingleStudent from '../views/SingleStudent.vue';
-import SingleProfessor from '../views/SingleProfessor.vue';
-import SingleCourse from '../views/SingleCourse.vue';
+import SingleStudent from '../views/Students/SingleStudent.vue';
+import SingleStudentProfile from '../views/Students/SingleStudent/SingleStudentProfile.vue';
+import SingleStudentSchedule from '../views/Students/SingleStudent/SingleStudentSchedule.vue';
+
+import SingleProfessor from '../views/Professors/SingleProfessor.vue';
+import SingleCourse from '../views/Courses/SingleCourse.vue';
 
 Vue.use(VueRouter);
 
@@ -37,6 +40,10 @@ const routes = [
     path: '/students/:id',
     name: 'SingleStudent',
     component: SingleStudent,
+    children: [
+      { path: '/students/:id/profile', name: 'Profile', component: SingleStudentProfile },
+      { path: '/students/:id/schedule', name: 'StudentSchedule', component: SingleStudentSchedule },
+    ],
   },
   {
     path: '/professors',
@@ -61,7 +68,7 @@ const routes = [
   {
     path: '/schedule',
     name: 'Schedule',
-    component: Schedule,
+    component: MainSchedule,
   },
 ];
 
