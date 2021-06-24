@@ -4,7 +4,9 @@
     <p class="row">{{ course.start_time }}</p>
     <p class="row">{{ course.end_time }}</p>
     <p class="row-days">{{ daysString }}</p>
-    <p class="row-professor">{{ "Prof. " + course.professor.last_name }}</p>
+    <p class="row-professor">
+      {{ course.professor.first_name[0] + ". " + course.professor.last_name }}
+    </p>
     <p class="row">{{ course.year }}</p>
     <p class="row">{{ course.semester ? "Spring" : "Fall" }}</p>
     <p class="button-row"><button @click="handleToggleEditing">Edit</button></p>

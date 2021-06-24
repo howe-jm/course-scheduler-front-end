@@ -16,7 +16,11 @@
       }}
     </div>
     <div class="course-professor">
-      {{ "Prof. " + scheduleComponent.schedule.professor.last_name }}
+      {{
+        scheduleComponent.schedule.professor.first_name[0] +
+        ". " +
+        scheduleComponent.schedule.professor.last_name
+      }}
     </div>
   </div>
   <div v-else>Schedule is loading...</div>
