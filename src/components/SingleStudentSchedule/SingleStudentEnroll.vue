@@ -53,7 +53,6 @@ export default {
     addNewCourse() {
       let schedule_id = this.selectedCourse;
       let student_id = this.studentId;
-      console.log(schedule_id, student_id);
 
       let itemData = qs.stringify({
         schedule_id,
@@ -85,7 +84,6 @@ export default {
   },
   computed: {
     availableCourses() {
-      console.log(this.currentSchedule);
       let availableCourses = this.mainSchedule;
       for (let i = 0; i < this.mainSchedule.length; i++) {
         for (let j = 0; j < this.currentSchedule.length; j++) {

@@ -14,7 +14,7 @@
         >Schedule</router-link
       >
     </div>
-    <router-view></router-view>
+    <router-view />
   </div>
   <div v-else><h3>Loading...</h3></div>
 </template>

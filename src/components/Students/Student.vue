@@ -9,12 +9,7 @@
     <p>Enrolled Courses: {{ student.student_schedule.length }}</p>
     <p>
       Semster Credits:
-      {{
-        student.student_schedule.reduce(
-          (acc, item) => acc + item.schedule.course.credit_value,
-          0
-        )
-      }}
+      {{ totalSemesterCredits }}
     </p>
     <div class="button-set">
       <button type="button" class="delete-button" @click="handleToggleEdit">
@@ -119,6 +114,14 @@ export default {
         major: this.student.major,
       };
       this.editing = !this.editing;
+    },
+  },
+  computed: {
+    totalSemesterCredits() {
+      return this.student.student_schedule.reduce(
+        (acc, item) => acc + item.schedule.course.credit_value,
+        0
+      );
     },
   },
 };
