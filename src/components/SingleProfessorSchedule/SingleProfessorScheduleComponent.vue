@@ -24,9 +24,6 @@ export default {
   props: {
     scheduleComponent: Object,
   },
-  mounted() {
-    console.log(this.scheduleComponent);
-  },
   computed: {
     daysString() {
       let { monday, tuesday, wednesday, thursday, friday } =
