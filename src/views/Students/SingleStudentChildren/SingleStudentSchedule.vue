@@ -7,6 +7,7 @@
         <div class="course-days">Days</div>
         <div class="course-times">Hours</div>
         <div class="course-professor">Professor</div>
+        <div class="course-controls">Controls</div>
       </div>
       <div
         class="schedule-component-outer"
@@ -17,12 +18,16 @@
           :scheduleComponent="scheduleComponent"
         />
       </div>
+      <div class="button-set">
+        <SingleStudentEnroll />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import SingleStudentScheduleComponent from "@/components/SingleStudentSchedule/SingleStudentScheduleComponent.vue";
+import SingleStudentEnroll from "@/components/SingleStudentSchedule/SingleStudentEnroll.vue";
 
 export default {
   name: "SingleStudentSchedule",
@@ -33,6 +38,7 @@ export default {
   },
   components: {
     SingleStudentScheduleComponent,
+    SingleStudentEnroll,
   },
 };
 </script>
@@ -72,6 +78,10 @@ export default {
 }
 .course-professor {
   width: 150px;
+  border-left: 1px solid black;
+}
+.course-controls {
+  width: 100px;
   border-left: 1px solid black;
 }
 </style>

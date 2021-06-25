@@ -4,15 +4,13 @@
       {{ student.first_name + " " + student.last_name }}
     </h2>
     <div id="student-nav">
-      <router-link
-        :to="{ path: `/students/${student.id}/profile` }"
-        params="{student}"
+      <router-link :to="{ path: `/students/${student.id}/profile` }"
         >Profile</router-link
       >
       |
       <router-link
         :to="{ path: `/students/${student.id}/schedule` }"
-        params="{student}"
+        @refresh-student="refreshStudent"
         >Schedule</router-link
       >
     </div>
@@ -23,9 +21,11 @@
 
 <script>
 import axios from "axios";
+import EventBus from "@/bus/bus.js";
 
 export default {
   name: "SingleStudent",
+  components: {},
   data() {
     return {
       student: {},
@@ -33,10 +33,18 @@ export default {
       dataLoaded: false,
     };
   },
+  created() {
+    EventBus.$on("refresh-student", this.refreshStudent);
+  },
   mounted() {
     this.getSingleStudent();
   },
   methods: {
+    refreshStudent() {
+      console.log("The thing!");
+      this.dataLoaded = false;
+      this.getSingleStudent();
+    },
     getSingleStudent() {
       axios
         .get(this.endpoint)

@@ -22,14 +22,38 @@
         scheduleComponent.schedule.professor.last_name
       }}
     </div>
+    <div class="course-controls">
+      <button @click="handleWithdrawClass">Withdraw</button>
+    </div>
   </div>
   <div v-else>Schedule is loading...</div>
 </template>
 
 <script>
+import EventBus from "@/bus/bus.js";
+
+import axios from "axios";
+
 export default {
+  name: "SingleStudentScheduleComponent",
+  data() {
+    return {
+      deleteEndpoint: `http://192.168.1.29:8765/api/studentschedule/delete/${this.scheduleComponent.id}`,
+    };
+  },
   props: {
     scheduleComponent: Object,
+  },
+  methods: {
+    handleWithdrawClass() {
+      var config = {
+        method: "delete",
+        url: this.deleteEndpoint,
+      };
+      axios(config)
+        .then(() => EventBus.$emit("refresh-student"))
+        .catch((error) => console.error(error));
+    },
   },
   computed: {
     daysString() {
@@ -83,5 +107,16 @@ export default {
 .course-professor {
   width: 150px;
   border-left: 1px solid black;
+}
+.course-controls {
+  width: 100px;
+  border-left: 1px solid black;
+}
+.course-controls button {
+  background: lightgrey;
+  width: inherit;
+  height: inherit;
+  padding: 2px;
+  border: none;
 }
 </style>
