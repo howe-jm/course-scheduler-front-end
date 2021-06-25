@@ -8,9 +8,7 @@
         >Profile</router-link
       >
       |
-      <router-link
-        :to="{ path: `/students/${student.id}/schedule` }"
-        @refresh-student="refreshStudent"
+      <router-link :to="{ path: `/students/${student.id}/schedule` }"
         >Schedule</router-link
       >
     </div>

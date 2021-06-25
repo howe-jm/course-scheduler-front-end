@@ -1,44 +1,38 @@
 <template>
   <div>
-    <h3>Student Schedule</h3>
+    <h3>Professor Schedule</h3>
     <div class="schedule-component-container">
       <div class="schedule-component-inner-table">
         <div class="course-name">Subject</div>
         <div class="course-days">Days</div>
         <div class="course-times">Hours</div>
-        <div class="course-professor">Professor</div>
-        <div class="course-controls">Controls</div>
+        <div class="course-students">Students</div>
       </div>
       <div
         class="schedule-component-outer"
-        v-for="scheduleComponent in student.student_schedule"
+        v-for="scheduleComponent in professor.schedule"
         :key="scheduleComponent.id"
       >
-        <SingleStudentScheduleComponent
+        <SingleProfessorScheduleComponent
           :scheduleComponent="scheduleComponent"
         />
-      </div>
-      <div class="button-set">
-        <SingleStudentEnroll />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import SingleStudentScheduleComponent from "@/components/SingleStudentSchedule/SingleStudentScheduleComponent.vue";
-import SingleStudentEnroll from "@/components/SingleStudentSchedule/SingleStudentEnroll.vue";
+import SingleProfessorScheduleComponent from "@/components/SingleProfessorSchedule/SingleProfessorScheduleComponent.vue";
 
 export default {
-  name: "StudentSchedule",
+  name: "ProfessorSchedule",
   data() {
     return {
-      student: this.$parent.student,
+      professor: this.$parent.professor,
     };
   },
   components: {
-    SingleStudentScheduleComponent,
-    SingleStudentEnroll,
+    SingleProfessorScheduleComponent,
   },
 };
 </script>
@@ -76,12 +70,8 @@ export default {
   width: 150px;
   border-left: 1px solid black;
 }
-.course-professor {
-  width: 150px;
-  border-left: 1px solid black;
-}
-.course-controls {
-  width: 100px;
+.course-students {
+  width: 70px;
   border-left: 1px solid black;
 }
 </style>

@@ -14,6 +14,9 @@ import SingleStudentSchedule from '../views/Students/SingleStudentChildren/Singl
 // Professor views
 import Professors from '../views/Professors/Professors.vue';
 import SingleProfessor from '../views/Professors/SingleProfessor.vue';
+// Professor view children
+import SingleProfessorProfile from '../views/Professors/SingleProfessorChildren/SingleProfessorProfile.vue';
+import SingleProfessorSchedule from '../views/Professors/SingleProfessorChildren/SingleProfessorSchedule.vue';
 
 // Courses views
 import Courses from '../views/Courses/Courses.vue';
@@ -48,7 +51,7 @@ const routes = [
     name: 'SingleStudent',
     component: SingleStudent,
     children: [
-      { path: '/students/:id/profile', name: 'Profile', component: SingleStudentProfile },
+      { path: '/students/:id/profile', name: 'StudentProfile', component: SingleStudentProfile },
       { path: '/students/:id/schedule', name: 'StudentSchedule', component: SingleStudentSchedule },
     ],
   },
@@ -61,6 +64,10 @@ const routes = [
     path: '/professors/:id',
     name: 'SingleProfessor',
     component: SingleProfessor,
+    children: [
+      { path: '/professors/:id/profile', name: 'ProfessorProfile', component: SingleProfessorProfile },
+      { path: '/professors/:id/schedule', name: 'ProfessorSchedule', component: SingleProfessorSchedule },
+    ],
   },
   {
     path: '/courses',

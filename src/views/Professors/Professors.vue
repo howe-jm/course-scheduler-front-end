@@ -60,9 +60,8 @@ export default {
     getAllProfessors() {
       axios
         .get(this.endpoint)
-        .then((response) => {
-          this.professors = response.data;
-        })
+        .then((response) => (this.professors = response.data))
+        .then(() => (this.dataLoaded = true))
         .catch((error) => {
           console.log(error);
         });

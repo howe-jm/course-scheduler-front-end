@@ -1,7 +1,7 @@
 <template>
   <span v-if="!editing" class="professor-inner">
     <h3>
-      <router-link :to="{ path: `/professors/${professor.id}` }">{{
+      <router-link :to="{ path: `/professors/${professor.id}/profile` }">{{
         professor.first_name + " " + professor.last_name
       }}</router-link>
     </h3>

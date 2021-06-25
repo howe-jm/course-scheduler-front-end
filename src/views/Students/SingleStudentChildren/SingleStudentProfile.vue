@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  name: "SingleStudentSchedule",
+  name: "StudentSchedule",
   data() {
     return {
       student: this.$parent.student,
