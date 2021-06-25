@@ -50,7 +50,7 @@ export default {
   width: 1200px;
   margin: auto;
 }
-.scheule-component-outer {
+.schedule-component-outer {
   display: flex;
   flex-direction: column;
 }
