@@ -41,7 +41,6 @@ export default {
   },
   methods: {
     refreshStudent() {
-      console.log("The thing!");
       this.dataLoaded = false;
       this.getSingleStudent();
     },
