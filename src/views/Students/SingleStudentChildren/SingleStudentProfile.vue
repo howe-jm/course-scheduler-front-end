@@ -10,6 +10,10 @@
       ><span class="profile-right">{{ studentActivity }}</span>
     </div>
     <div class="profile-row">
+      <span class="profile-left">GPA</span
+      ><span class="profile-right">Not Yet Implemented</span>
+    </div>
+    <div class="profile-row">
       <span class="profile-left">Enrolled Courses</span
       ><span class="profile-right">{{ totalSemesterCourses }}</span>
     </div>
